@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+// comment
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -125,7 +126,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: Column(
                   children: [
                     Flexible(
-                      fit: FlexFit.tight, // Makes the image take available space
+                      fit:
+                          FlexFit.tight, // Makes the image take available space
                       child: Image.asset(
                         'assets/darkom.png', // Updated asset path
                         fit: BoxFit.contain,
