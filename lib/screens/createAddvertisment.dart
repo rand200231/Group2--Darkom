@@ -4,8 +4,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io'; 
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
-
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
@@ -88,8 +86,6 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 class AdvertisementScreen extends StatefulWidget {
-  const AdvertisementScreen({super.key});
-
   @override
   _AdvertisementScreenState createState() => _AdvertisementScreenState();
 }
@@ -188,8 +184,6 @@ class _AdvertisementScreenState extends State<AdvertisementScreen> {
 }
 
 class AdvertisementBox extends StatelessWidget {
-  const AdvertisementBox({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -211,7 +205,7 @@ class AppPrimaryButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const AppPrimaryButton({super.key, 
+  const AppPrimaryButton({
     required this.text,
     required this.onPressed,
   });
