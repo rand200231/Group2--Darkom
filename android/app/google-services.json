@@ -7,9 +7,85 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:725679442495:android:92993ae05eaceb7954068a",
+        "mobilesdk_app_id": "1:725679442495:android:0316f500a0faaedd54068a",
         "android_client_info": {
-          "package_name": "com.example.swe444"
+          "package_name": "com.app.darkom"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7MWKd1l1e7X7SLKSd7qHLWq13lIHUdDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725679442495:android:2866946909e827a554068a",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7MWKd1l1e7X7SLKSd7qHLWq13lIHUdDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725679442495:android:284a96d511c142f654068a",
+        "android_client_info": {
+          "package_name": "com.example.flutter_darkom"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7MWKd1l1e7X7SLKSd7qHLWq13lIHUdDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725679442495:android:78b4dda7b8d257fa54068a",
+        "android_client_info": {
+          "package_name": "com.example.your_project_name"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7MWKd1l1e7X7SLKSd7qHLWq13lIHUdDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:725679442495:android:89affab6d13501d654068a",
+        "android_client_info": {
+          "package_name": "com.group2.darkom"
         }
       },
       "oauth_client": [],

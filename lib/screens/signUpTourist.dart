@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../home/screens/main_experience_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -47,6 +48,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       _showSuccessDialog('User registered successfully!');
       _clearTextFields();
+      // ✅ Navigate to MainExperienceScreen after successful signup
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const MainExperienceScreen()),
+    );
     } catch (error) {
       _showErrorDialog('An error occurred while signing up.');
     }

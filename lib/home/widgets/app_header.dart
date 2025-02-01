@@ -1,27 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class AppHeader extends StatelessWidget implements PreferredSizeWidget{
-  const AppHeader({super.key});
+class AppHeader extends StatelessWidget implements PreferredSizeWidget {
+  final bool showBackButton; // ✅ Add this
+
+  const AppHeader({super.key, this.showBackButton = true}); // ✅ Default is true
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
       width: double.infinity,
-      // height: 120.h,
-      decoration: BoxDecoration(
-        // color: Theme.of(context).primaryColor,
-        // borderRadius: BorderRadius.circular(19.0.r),
-      ),
       padding: EdgeInsets.only(top: ScreenUtil().statusBarHeight),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          if (Navigator.of(context).canPop() == true)
+          // ✅ Show back button only if showBackButton is true
+          if (showBackButton && Navigator.of(context).canPop())
             IconButton(
-              // padding: EdgeInsets.only(left: 10.w),
               onPressed: () => Navigator.of(context).pop(),
               icon: CircleAvatar(
                 backgroundColor: Color(0XFFf0ecdc),
@@ -32,14 +28,14 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget{
                 ),
               ),
             ),
-          const SizedBox.shrink(),
           
+          const SizedBox.shrink(),
           Image.asset("assets/icons/welcome.png", width: 97.5.w, height: 105.5.h),
         ],
       ),
     );
   }
-  
+
   @override
   Size get preferredSize => Size.fromHeight(120.h);
 }

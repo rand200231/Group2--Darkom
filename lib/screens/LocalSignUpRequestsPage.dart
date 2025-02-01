@@ -5,6 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'login_screen.dart';
 
 class LocalSignUpRequestsPage extends StatefulWidget {
+  const LocalSignUpRequestsPage({super.key});
+
   @override
   _LocalSignUpRequestsPageState createState() =>
       _LocalSignUpRequestsPageState();
@@ -144,6 +146,8 @@ class _LocalSignUpRequestsPageState extends State<LocalSignUpRequestsPage> {
 }
 
 class ApprovedRequestsPage extends StatelessWidget {
+  const ApprovedRequestsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -239,6 +243,8 @@ class ApprovedRequestsPage extends StatelessWidget {
 }
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
@@ -322,6 +328,8 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 class RejectedRequestsPage extends StatelessWidget {
+  const RejectedRequestsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -417,6 +425,8 @@ class RejectedRequestsPage extends StatelessWidget {
 }
 
 class login_screen extends StatelessWidget {
+  const login_screen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

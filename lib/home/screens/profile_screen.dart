@@ -32,7 +32,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return RefreshIndicator(
       onRefresh: () async => profileController.fetchUserInfo(context),
       child: Scaffold(
-        appBar: const AppHeader(),
+appBar: const AppHeader(showBackButton: false),
         body: Center(
           child: Obx(
             () {
