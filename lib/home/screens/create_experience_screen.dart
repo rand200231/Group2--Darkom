@@ -1,0 +1,401 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
+import 'package:darkom/home/widgets/app_primary_button.dart';
+import 'package:darkom/home/widgets/custom_labeled_textfield.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+
+import '../widgets/app_header.dart';
+import '../home_helper.dart';
+import '../controllers/create_experience_controller.dart';
+import 'location_screen.dart';
+
+class CreateExperienceScreen extends StatelessWidget {
+  const CreateExperienceScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final CreateExperienceController controller = Get.put(CreateExperienceController());
+    
+    return Scaffold(
+      appBar: const AppHeader(),
+      body: Container(
+        width: ScreenUtil().screenWidth - 30.w,
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.horizontal(right: Radius.circular(58.r))
+        ),
+        child: ListView(
+          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 20.h),
+          children: [
+            Text("Create your new Experience", style: TextStyle(
+              fontSize: 25.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              height: 1.2,
+            )),
+            20.verticalSpace,
+
+            Form(
+              key: controller.formKey,
+              child: Column(
+                children: [
+                  // - name
+                  CustomLabeledTextField(
+                    label: 'Name'.toUpperCase(),
+                    hintText: 'Enter the name of the Experience',
+                    fillColor: Colors.white.withOpacity(0.38),
+                    labelColor: Colors.white,
+                    inputTextColor: Colors.white,
+                    controller: controller.nameController,
+                    validation: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "This field is required";
+                      }
+                      return null;
+                    },
+                  ),
+                  15.verticalSpace,
+                  
+                  // - description
+                  CustomLabeledTextField(
+                    label: 'Description'.toUpperCase(),
+                    hintText: 'Describe the Experience',
+                    maxLines: 3,
+                    fillColor: Colors.white.withOpacity(0.38),
+                    labelColor: Colors.white,
+                    inputTextColor: Colors.white,
+                    controller: controller.descriptionController,
+                    validation: (value) {
+                      if (value == null || value.isEmpty) {
+                        return "This field is required";
+                      }
+                      return null;
+                    },
+                  ),
+                  15.verticalSpace,
+                  
+                  // - photos
+                  CustomLabeledTextField(
+                    label: 'Photo/s'.toUpperCase(),
+                    hintText: 'Upload your images here',
+                    readOnly: true,
+                    fillColor: Colors.white.withOpacity(0.38),
+                    labelColor: Colors.white,
+                    inputTextColor: Colors.white,
+                    suffixIcon: const Icon(Icons.add_a_photo_outlined),
+                    onTap: () {
+                      // Open the gallery to select images
+                      controller.pickImages(context); // فتح معرض الصور
+                    },
+                    validation: (value) {
+                      if (controller.selectedImages.isEmpty) {
+                        return "You must upload image/s";
+                      }
+                      return null;
+                    },
+                  ),
+                  10.verticalSpace,
+                  
+                  // عرض الصور المختارة في ListView أفقي
+                  Obx(() {
+                    if (controller.selectedImages.isEmpty) {
+                      return const SizedBox(); // لا تعرض شيئًا إذا لم تكن هناك صور
+                    }
+                    return SizedBox(
+                      height: 100, // ارتفاع ListView
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: controller.selectedImages.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Stack(
+                              children: [
+                                // عرض الصورة
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.file(
+                                    controller.selectedImages[index],
+                                    width: 100,
+                                    height: 100,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) => const SizedBox(),
+                                  ),
+                                ),
+
+                                // زر حذف الصورة
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: CircleAvatar(
+                                    radius: 15,
+                                    backgroundColor: Colors.transparent.withOpacity(0.36),
+                                    child: IconButton(
+                                      icon: const Icon(Icons.close, color: Colors.red),
+                                      style: IconButton.styleFrom(
+                                        shadowColor: Colors.white,
+                                        elevation: 5,
+                                        padding: const EdgeInsets.all(0)),
+                                        onPressed: () {
+                                          controller.removeImage(index); // حذف الصورة
+                                        },
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }),
+                
+                  15.verticalSpace,
+
+                  // - category
+                  _buildDropdownWidget(context),
+                  15.verticalSpace,
+
+                  // - price and available seats
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: CustomLabeledTextField(
+                          label: 'Price (per participant)'.toUpperCase(),
+                          keyboardType: TextInputType.number,
+                          fillColor: Colors.white.withOpacity(0.38),
+                          labelColor: Colors.white,
+                          inputTextColor: Colors.white,
+                          controller: controller.priceController,
+                          suffixIcon: Center(child: Text('SR', style: TextStyle(color: Theme.of(context).iconTheme.color,))),
+                          validation: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "This field is required";
+                            }
+                            if (!value.isNumericOnly) {
+                              return "Must contain numbers only.";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      10.horizontalSpace,
+                      
+                      Expanded(
+                        child: CustomLabeledTextField(
+                          label: 'Available seats'.toUpperCase(),
+                          keyboardType: TextInputType.number,
+                          fillColor: Colors.white.withOpacity(0.38),
+                          labelColor: Colors.white,
+                          inputTextColor: Colors.white,
+                          controller: controller.availableSeatsController,
+                          validation: (value) {
+                            if (value == null || value.isEmpty) {
+                              return "This field is required";
+                            }
+                            if (!value.isNumericOnly) {
+                              return "Must contain numbers only.";
+                            }
+                            return null;
+                          },
+                          suffixIcon: const Icon(Icons.chair),
+                        ),
+                      ),
+                    ],
+                  ),
+                  15.verticalSpace,
+                  
+                  // - date and time
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Obx(() => CustomLabeledTextField(
+                          label: 'Date'.toUpperCase(),
+                          hintText: controller.selectedDate.value != null? DateFormat('yyyy-mm-dd').format(controller.selectedDate.value!) : 'Select date',
+                          hintColor: controller.selectedDate.value != null? Colors.white : null,
+                          
+                          readOnly: true,
+                          onTap: () async {
+                            log('--- selected date: ${controller.selectedDate.value}');
+                            await HomeHelper.pickDateAndTime(context, controller.selectedDate);
+                            log('--- selected date: ${controller.selectedDate.value}');
+                          },
+
+                          fillColor: Colors.white.withOpacity(0.38),
+                          labelColor: Colors.white,
+                          inputTextColor: Colors.white,
+                          suffixIcon: Container(
+                            decoration: BoxDecoration(
+                              border: Border(left: BorderSide(color: Theme.of(context).primaryColor, width: 2.5.sp))
+                            ),
+                            child: Icon(Icons.arrow_drop_down_outlined, size: 30.sp),
+                          ),
+                          validation: (value) {
+                            if (controller.selectedDate.value == null) {
+                              return "This field is required";
+                            }
+                            return null;
+                          },
+                        )),
+                      ),
+                      10.horizontalSpace,
+                      
+                      Expanded(
+                        child: Obx(() => CustomLabeledTextField(
+                          label: 'Time'.toUpperCase(),
+                          hintText: controller.selectedTime.value != null? HomeHelper.formatTime(controller.selectedTime.value!) : 'Select time',
+                          
+                          hintColor: controller.selectedTime.value != null? Colors.white : null,
+                          readOnly: true,
+                          onTap: () {
+                            HomeHelper.pickTime(context, controller.selectedTime);
+                          },
+                          fillColor: Colors.white.withOpacity(0.38),
+                          labelColor: Colors.white,
+                          inputTextColor: Colors.white,
+                          suffixIcon: Container(
+                            decoration: BoxDecoration(
+                              border: Border(left: BorderSide(color: Theme.of(context).primaryColor, width: 2.5.sp))
+                            ),
+                            child: Icon(Icons.arrow_drop_down_outlined, size: 30.sp),
+                          ),
+                          validation: (value) {
+                            if (controller.selectedTime.value == null) {
+                              return "This field is required";
+                            }
+                            return null;
+                          },
+                        ),
+                      )),
+                    ],
+                  ),
+                  15.verticalSpace,
+                   
+                  // - location
+                  Obx(() => CustomLabeledTextField(
+                    label: 'Location'.toUpperCase(),
+                    hintText: controller.selectedAddress.isNotEmpty? controller.selectedAddress.value : 'Enter the address or locate it on the map',
+                    hintColor: controller.selectedAddress.isNotEmpty? Colors.white : null,
+                    readOnly: true,
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => 
+                        LocationScreen(
+                          selectedLocation: controller.selectedLatLng.value,
+                          onSelectLocation: (selectedLatLng, address) {
+                            controller.selectedLatLng.value = selectedLatLng;
+                            controller.selectedAddress.value = address;
+
+                            log('-------- inside onSelectLocation: address: ${controller.selectedAddress.value}');
+                          },
+                        )
+                      ));
+                    },
+                    fillColor: Colors.white.withOpacity(0.38),
+                    labelColor: Colors.white,
+                    inputTextColor: Colors.white,
+                    suffixIcon: const Icon(Icons.location_on_outlined),
+                    validation: (value) {
+                      if (controller.selectedLatLng.value == null || controller.selectedAddress.isEmpty) {
+                        return "This field is required";
+                      }
+                      return null;
+                    },
+                  )),
+                  15.verticalSpace,
+
+                  Obx(() => AppPrimaryButton(
+                    text: 'Submit Your Experience',
+                    isLoading: controller.isLoading.value,
+                    onPressed: () => controller.uploadExperience(context),
+                  )),
+                  15.verticalSpace,
+                ],
+              ),
+            ),
+
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDropdownWidget(BuildContext context) {
+    final controller = Get.find<CreateExperienceController>();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Category',
+          style: TextStyle(
+            fontSize: 12.sp,
+            // fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
+        ),
+        SizedBox(height: 3.h),
+
+        DropdownButtonFormField(
+          items: const [
+            DropdownMenuItem(value: 'Adventure', child: Text('Adventure')),
+            DropdownMenuItem(value: 'Culture', child: Text('Culture')),
+            DropdownMenuItem(value: 'Food', child: Text('Food')),
+          ],
+          alignment: Alignment.center,
+          dropdownColor: Theme.of(context).primaryColor,
+          isDense: true,
+          // isExpanded: true,
+          
+          iconSize: 0,
+          onChanged: (value) {
+            controller.categoryController.text = value ?? '';
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return "This field is required";
+            }
+            return null;
+          },
+          // controller: controller.,
+          // validator: validation,
+          style: TextStyle(color: Colors.white, fontSize: 13.sp),
+          // onTap: onTap,
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(horizontal: 15.sp, vertical: 8.sp),
+            // isCollapsed: true,
+            hintText: 'Select Category',
+            hintStyle: TextStyle(color: Theme.of(context).primaryColor, fontSize: 13.sp),
+            // prefixIcon: prefixIcon,
+            suffixIcon: Container(
+              decoration: BoxDecoration(
+                border: Border(left: BorderSide(color: Theme.of(context).primaryColor, width: 2.5.sp))
+              ),
+              child: Icon(Icons.arrow_drop_down_outlined, size: 30.sp),
+            ),
+            suffixIconConstraints: const BoxConstraints(maxWidth: 50, minWidth: 40),
+            
+            filled: true,
+            isDense: true,
+            fillColor: Colors.white.withOpacity(0.38),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: Colors.transparent),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: const BorderSide(color: Colors.transparent),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(color: Theme.of(context).primaryColor),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

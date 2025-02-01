@@ -108,7 +108,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     Flexible(
                       fit: FlexFit.tight, // Makes the image take available space
                       child: Image.asset(
-                        'assets/darkom.png', // Updated asset path
+                        'assets/icons/welcome.png', // Updated asset path
                         fit: BoxFit.contain,
                       ),
                     ),

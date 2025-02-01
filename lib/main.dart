@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_333/screens/signUpTourist.dart';
+import '../screens/signUpTourist.dart';
 import 'package:firebase_core/firebase_core.dart';
 //import 'signUpTourist.dart';
 
